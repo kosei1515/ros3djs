@@ -56998,7 +56998,7 @@ var ROS3D = (function (exports, ROSLIB) {
 	  constructor(options) {
 	    super();
 	    options = options || {};
-	    options.ros;
+	    this.ros = options.ros;
 	    this.topicName = options.param || 'robot_description';
 	    this.path = options.path || '/';
 	    this.tfClient = options.tfClient;

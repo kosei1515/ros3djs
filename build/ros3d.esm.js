@@ -56498,7 +56498,7 @@ var UrdfClient = /*@__PURE__*/(function (superclass) {
   function UrdfClient(options) {
     superclass.call(this);
     options = options || {};
-    options.ros;
+    this.ros = options.ros;
     this.topicName = options.param || 'robot_description';
     this.path = options.path || '/';
     this.tfClient = options.tfClient;

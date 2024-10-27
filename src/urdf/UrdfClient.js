@@ -25,7 +25,7 @@
  */
 ROS3D.UrdfClient = function(options) {
   options = options || {};
-  var ros = options.ros;
+  this.ros = options.ros;
   this.topicName = options.param || 'robot_description';
   this.path = options.path || '/';
   this.tfClient = options.tfClient;
