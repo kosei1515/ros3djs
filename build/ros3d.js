@@ -57047,7 +57047,7 @@ var ROS3D = (function (exports, ROSLIB) {
 	      ros: this.ros,
 	      name: this.param,
 	      queue_length: 1,
-	      messageType: 'std_msgs/String',
+	      messageType: 'std_msgs/msg/String',
 	    });
 	    this.rosTopic.subscribe(this.processMessage.bind(this));
 	  };
