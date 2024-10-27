@@ -56529,6 +56529,8 @@ var UrdfClient = /*@__PURE__*/(function (superclass) {
     this.rootObject = options.rootObject || new THREE.Object3D();
     this.tfPrefix = options.tfPrefix || '';
     this.loader = options.loader;
+    this.rosTopic = undefined;
+    this.urdf = undefined;
 
     // get the URDF value from ROS
     // var getParam = new ROSLIB.Param({
