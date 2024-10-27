@@ -56565,7 +56565,7 @@ var UrdfClient = /*@__PURE__*/(function (superclass) {
 
   UrdfClient.prototype.unsubscribe = function unsubscribe (){
     if(this.rosTopic){
-      this.rosTopic.unsubscribe(this.processMessageBound);
+      this.rosTopic.unsubscribe(this.processMessage.bind(this));
     }
   };
   UrdfClient.prototype.subscribe = function subscribe (){
@@ -56578,12 +56578,14 @@ var UrdfClient = /*@__PURE__*/(function (superclass) {
       queue_length: 1,
       messageType: 'std_msgs/String',
     });
-    this.rosTopic.subscribe(this.processMessageBound);
+    this.rosTopic.subscribe(this.processMessage.bind(this));
   };
   UrdfClient.prototype.processMessage = function processMessage (message){
+    console.log(message.data);
     var urdfModel = new ROSLIB__namespace.UrdfModel({
       string: message.data,
     });
+    console.log("test");
 
     this.urdf = new Urdf({
       urdfModel: urdfModel,

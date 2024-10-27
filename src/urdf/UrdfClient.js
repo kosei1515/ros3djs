@@ -66,7 +66,7 @@ ROS3D.UrdfClient.prototype.__proto__ = THREE.Object3D.prototype;
 
 ROS3D.UrdfClient.prototype.unsubscribe = function(){
   if(this.rosTopic){
-    this.rosTopic.unsubscribe(this.processMessageBound);
+    this.rosTopic.unsubscribe(this.processMessage.bind(this));
   }
 };
 
@@ -80,13 +80,15 @@ ROS3D.UrdfClient.prototype.subscribe = function(){
     queue_length: 1,
     messageType: 'std_msgs/String',
   });
-  this.rosTopic.subscribe(this.processMessageBound);
+  this.rosTopic.subscribe(this.processMessage.bind(this));
 };
 
 ROS3D.UrdfClient.prototype.processMessage = function(message){
+  console.log(message.data);
   var urdfModel = new ROSLIB.UrdfModel({
     string: message.data,
   });
+  console.log("test");
 
   this.urdf = new ROS3D.Urdf({
     urdfModel: urdfModel,

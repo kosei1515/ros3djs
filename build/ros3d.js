@@ -57038,7 +57038,7 @@ var ROS3D = (function (exports, ROSLIB) {
 
 	  unsubscribe(){
 	    if(this.rosTopic){
-	      this.rosTopic.unsubscribe(this.processMessageBound);
+	      this.rosTopic.unsubscribe(this.processMessage.bind(this));
 	    }
 	  };
 
@@ -57052,13 +57052,15 @@ var ROS3D = (function (exports, ROSLIB) {
 	      queue_length: 1,
 	      messageType: 'std_msgs/String',
 	    });
-	    this.rosTopic.subscribe(this.processMessageBound);
+	    this.rosTopic.subscribe(this.processMessage.bind(this));
 	  };
 
 	  processMessage(message){
+	    console.log(message.data);
 	    var urdfModel = new ROSLIB__namespace.UrdfModel({
 	      string: message.data,
 	    });
+	    console.log("test");
 
 	    this.urdf = new Urdf({
 	      urdfModel: urdfModel,
