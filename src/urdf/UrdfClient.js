@@ -26,15 +26,18 @@
 ROS3D.UrdfClient = function(options) {
   options = options || {};
   var ros = options.ros;
-  this.param = options.param || 'robot_description';
+  this.topicName = options.param || 'robot_description';
   this.path = options.path || '/';
   this.tfClient = options.tfClient;
   this.rootObject = options.rootObject || new THREE.Object3D();
   this.tfPrefix = options.tfPrefix || '';
   this.loader = options.loader;
+  
   this.rosTopic = undefined;
   this.urdf = undefined;
+  this.processMessageBound = this.processMessage.bind(this);
 
+  this.subscribe();
   // get the URDF value from ROS
   // var getParam = new ROSLIB.Param({
   //   ros : ros,
@@ -63,7 +66,7 @@ ROS3D.UrdfClient.prototype.__proto__ = THREE.Object3D.prototype;
 
 ROS3D.UrdfClient.prototype.unsubscribe = function(){
   if(this.rosTopic){
-    this.rosTopic.unsubscribe(this.processMessage);
+    this.rosTopic.unsubscribe(this.processMessageBound);
   }
 };
 
@@ -73,15 +76,14 @@ ROS3D.UrdfClient.prototype.subscribe = function(){
   // subscribe to the topic
   this.rosTopic = new ROSLIB.Topic({
     ros: this.ros,
-    name: this.param,
+    name: this.topicName,
     queue_length: 1,
-    messageType: 'std_msgs/msg/String',
+    messageType: 'std_msgs/String',
   });
-  this.rosTopic.subscribe(this.processMessage.bind(this));
+  this.rosTopic.subscribe(this.processMessageBound);
 };
 
 ROS3D.UrdfClient.prototype.processMessage = function(message){
-  console.log(message);
   var urdfModel = new ROSLIB.UrdfModel({
     string: message.data,
   });
