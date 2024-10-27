@@ -56974,7 +56974,7 @@ var ROS3D = (function (exports, ROSLIB) {
 	 * @author Russell Toris - rctoris@wpi.edu
 	 */
 
-	class UrdfClient {
+	class UrdfClient extends THREE.Object3D {
 
 	  /**
 	   * A URDF client can be used to load a URDF and its associated models into a 3D object from the ROS
@@ -56996,8 +56996,9 @@ var ROS3D = (function (exports, ROSLIB) {
 	   *   * loader (optional) - the Collada loader to use (e.g., an instance of ROS3D.COLLADA_LOADER)
 	   */
 	  constructor(options) {
+	    super();
 	    options = options || {};
-	    var ros = options.ros;
+	    options.ros;
 	    this.param = options.param || 'robot_description';
 	    this.path = options.path || '/';
 	    this.tfClient = options.tfClient;
@@ -57006,26 +57007,62 @@ var ROS3D = (function (exports, ROSLIB) {
 	    this.loader = options.loader;
 
 	    // get the URDF value from ROS
-	    var getParam = new ROSLIB__namespace.Param({
-	      ros : ros,
-	      name : this.param
-	    });
-	    getParam.get(function(string) {
-	      // hand off the XML string to the URDF model
-	      var urdfModel = new ROSLIB__namespace.UrdfModel({
-	        string : string
-	      });
+	    // var getParam = new ROSLIB.Param({
+	    //   ros : ros,
+	    //   name : this.param
+	    // });
+	    // getParam.get(function(string) {
+	    //   // hand off the XML string to the URDF model
+	    //   var urdfModel = new ROSLIB.UrdfModel({
+	    //     string : string
+	    //   });
 
-	      // load all models
-	      this.urdf = new Urdf({
-	        urdfModel : urdfModel,
-	        path : this.path,
-	        tfClient : this.tfClient,
-	        tfPrefix : this.tfPrefix,
-	        loader : this.loader
-	      });
-	      this.rootObject.add(this.urdf);
-	    }.bind(this));
+	    //   // load all models
+	    //   this.urdf = new ROS3D.Urdf({
+	    //     urdfModel : urdfModel,
+	    //     path : this.path,
+	    //     tfClient : this.tfClient,
+	    //     tfPrefix : this.tfPrefix,
+	    //     loader : this.loader
+	    //   });
+	    //   this.rootObject.add(this.urdf);
+	    // }.bind(this));
+	  };
+
+
+
+	  unsubscribe(){
+	    if(this.rosTopic){
+	      this.rosTopic.unsubscribe(this.processMessage);
+	    }
+	  };
+
+	  subscribe(){
+	    this.unsubscribe();
+
+	    // subscribe to the topic
+	    this.rosTopic = new ROSLIB__namespace.Topic({
+	      ros: this.ros,
+	      name: this.param,
+	      queue_length: 1,
+	      messageType: 'std_msgs/String',
+	    });
+	    this.rosTopic.subscribe(this.processMessage.bind(this));
+	  };
+
+	  processMessage(message){
+	    var urdfModel = new ROSLIB__namespace.UrdfModel({
+	      string: message.data,
+	    });
+
+	    this.urdf = new Urdf({
+	      urdfModel: urdfModel,
+	      path: this.path,
+	      tfClient: this.tfClient,
+	      tfPrefix: this.tfPrefix,
+	      loader: this.loader,
+	    });
+	    this.rootObject.add(this.urdf);
 	  };
 	}
 

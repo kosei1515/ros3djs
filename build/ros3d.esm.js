@@ -56494,38 +56494,80 @@ var Urdf = /*@__PURE__*/(function (superclass) {
  * @author Russell Toris - rctoris@wpi.edu
  */
 
-var UrdfClient = function UrdfClient(options) {
-  options = options || {};
-  var ros = options.ros;
-  this.param = options.param || 'robot_description';
-  this.path = options.path || '/';
-  this.tfClient = options.tfClient;
-  this.rootObject = options.rootObject || new THREE.Object3D();
-  this.tfPrefix = options.tfPrefix || '';
-  this.loader = options.loader;
+var UrdfClient = /*@__PURE__*/(function (superclass) {
+  function UrdfClient(options) {
+    superclass.call(this);
+    options = options || {};
+    options.ros;
+    this.param = options.param || 'robot_description';
+    this.path = options.path || '/';
+    this.tfClient = options.tfClient;
+    this.rootObject = options.rootObject || new THREE.Object3D();
+    this.tfPrefix = options.tfPrefix || '';
+    this.loader = options.loader;
 
-  // get the URDF value from ROS
-  var getParam = new ROSLIB.Param({
-    ros : ros,
-    name : this.param
-  });
-  getParam.get(function(string) {
-    // hand off the XML string to the URDF model
+    // get the URDF value from ROS
+    // var getParam = new ROSLIB.Param({
+    //   ros : ros,
+    //   name : this.param
+    // });
+    // getParam.get(function(string) {
+    //   // hand off the XML string to the URDF model
+    //   var urdfModel = new ROSLIB.UrdfModel({
+    //     string : string
+    //   });
+
+    //   // load all models
+    //   this.urdf = new ROS3D.Urdf({
+    //     urdfModel : urdfModel,
+    //     path : this.path,
+    //     tfClient : this.tfClient,
+    //     tfPrefix : this.tfPrefix,
+    //     loader : this.loader
+    //   });
+    //   this.rootObject.add(this.urdf);
+    // }.bind(this));
+  }
+
+  if ( superclass ) UrdfClient.__proto__ = superclass;
+  UrdfClient.prototype = Object.create( superclass && superclass.prototype );
+  UrdfClient.prototype.constructor = UrdfClient;
+
+
+  UrdfClient.prototype.unsubscribe = function unsubscribe (){
+    if(this.rosTopic){
+      this.rosTopic.unsubscribe(this.processMessage);
+    }
+  };
+  UrdfClient.prototype.subscribe = function subscribe (){
+    this.unsubscribe();
+
+    // subscribe to the topic
+    this.rosTopic = new ROSLIB.Topic({
+      ros: this.ros,
+      name: this.param,
+      queue_length: 1,
+      messageType: 'std_msgs/String',
+    });
+    this.rosTopic.subscribe(this.processMessage.bind(this));
+  };
+  UrdfClient.prototype.processMessage = function processMessage (message){
     var urdfModel = new ROSLIB.UrdfModel({
-      string : string
+      string: message.data,
     });
 
-    // load all models
     this.urdf = new Urdf({
-      urdfModel : urdfModel,
-      path : this.path,
-      tfClient : this.tfClient,
-      tfPrefix : this.tfPrefix,
-      loader : this.loader
+      urdfModel: urdfModel,
+      path: this.path,
+      tfClient: this.tfClient,
+      tfPrefix: this.tfPrefix,
+      loader: this.loader,
     });
     this.rootObject.add(this.urdf);
-  }.bind(this));
-};
+  };
+
+  return UrdfClient;
+}(THREE.Object3D));
 
 /**
  * @fileOverview

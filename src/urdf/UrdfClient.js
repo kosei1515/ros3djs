@@ -90,4 +90,5 @@ ROS3D.UrdfClient.prototype.processMessage = function(message){
     tfPrefix: this.tfPrefix,
     loader: this.loader,
   });
+  this.rootObject.add(this.urdf);
 };
