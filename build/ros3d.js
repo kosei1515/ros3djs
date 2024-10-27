@@ -57053,6 +57053,7 @@ var ROS3D = (function (exports, ROSLIB) {
 	  };
 
 	  processMessage(message){
+	    console.log(message);
 	    var urdfModel = new ROSLIB__namespace.UrdfModel({
 	      string: message.data,
 	    });

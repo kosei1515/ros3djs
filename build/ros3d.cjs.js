@@ -56578,6 +56578,7 @@ var UrdfClient = /*@__PURE__*/(function (superclass) {
     this.rosTopic.subscribe(this.processMessage.bind(this));
   };
   UrdfClient.prototype.processMessage = function processMessage (message){
+    console.log(message);
     var urdfModel = new ROSLIB__namespace.UrdfModel({
       string: message.data,
     });

@@ -81,6 +81,7 @@ ROS3D.UrdfClient.prototype.subscribe = function(){
 };
 
 ROS3D.UrdfClient.prototype.processMessage = function(message){
+  console.log(message);
   var urdfModel = new ROSLIB.UrdfModel({
     string: message.data,
   });
