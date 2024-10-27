@@ -38,27 +38,6 @@ ROS3D.UrdfClient = function(options) {
   this.processMessageBound = this.processMessage.bind(this);
 
   this.subscribe();
-  // get the URDF value from ROS
-  // var getParam = new ROSLIB.Param({
-  //   ros : ros,
-  //   name : this.param
-  // });
-  // getParam.get(function(string) {
-  //   // hand off the XML string to the URDF model
-  //   var urdfModel = new ROSLIB.UrdfModel({
-  //     string : string
-  //   });
-
-  //   // load all models
-  //   this.urdf = new ROS3D.Urdf({
-  //     urdfModel : urdfModel,
-  //     path : this.path,
-  //     tfClient : this.tfClient,
-  //     tfPrefix : this.tfPrefix,
-  //     loader : this.loader
-  //   });
-  //   this.rootObject.add(this.urdf);
-  // }.bind(this));
 };
 
 ROS3D.UrdfClient.prototype.__proto__ = THREE.Object3D.prototype;
@@ -84,11 +63,9 @@ ROS3D.UrdfClient.prototype.subscribe = function(){
 };
 
 ROS3D.UrdfClient.prototype.processMessage = function(message){
-  console.log(message.data);
   var urdfModel = new ROSLIB.UrdfModel({
     string: message.data,
   });
-  console.log("test");
 
   this.urdf = new ROS3D.Urdf({
     urdfModel: urdfModel,

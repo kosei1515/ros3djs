@@ -56535,27 +56535,6 @@ var UrdfClient = /*@__PURE__*/(function (superclass) {
     this.processMessageBound = this.processMessage.bind(this);
 
     this.subscribe();
-    // get the URDF value from ROS
-    // var getParam = new ROSLIB.Param({
-    //   ros : ros,
-    //   name : this.param
-    // });
-    // getParam.get(function(string) {
-    //   // hand off the XML string to the URDF model
-    //   var urdfModel = new ROSLIB.UrdfModel({
-    //     string : string
-    //   });
-
-    //   // load all models
-    //   this.urdf = new ROS3D.Urdf({
-    //     urdfModel : urdfModel,
-    //     path : this.path,
-    //     tfClient : this.tfClient,
-    //     tfPrefix : this.tfPrefix,
-    //     loader : this.loader
-    //   });
-    //   this.rootObject.add(this.urdf);
-    // }.bind(this));
   }
 
   if ( superclass ) UrdfClient.__proto__ = superclass;
@@ -56581,11 +56560,9 @@ var UrdfClient = /*@__PURE__*/(function (superclass) {
     this.rosTopic.subscribe(this.processMessage.bind(this));
   };
   UrdfClient.prototype.processMessage = function processMessage (message){
-    console.log(message.data);
     var urdfModel = new ROSLIB__namespace.UrdfModel({
       string: message.data,
     });
-    console.log("test");
 
     this.urdf = new Urdf({
       urdfModel: urdfModel,
