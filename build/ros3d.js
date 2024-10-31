@@ -57047,6 +57047,7 @@ var ROS3D = (function (exports, ROSLIB) {
 	      loader: this.loader,
 	    });
 	    this.rootObject.add(this.urdf);
+	    this.rosTopic.unsubscribe(this.processMessageBound);
 	  };
 	}
 

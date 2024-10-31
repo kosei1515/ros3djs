@@ -56572,6 +56572,7 @@ var UrdfClient = /*@__PURE__*/(function (superclass) {
       loader: this.loader,
     });
     this.rootObject.add(this.urdf);
+    this.rosTopic.unsubscribe(this.processMessageBound);
   };
 
   return UrdfClient;

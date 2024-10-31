@@ -75,4 +75,5 @@ ROS3D.UrdfClient.prototype.processMessage = function(message){
     loader: this.loader,
   });
   this.rootObject.add(this.urdf);
+  this.rosTopic.unsubscribe(this.processMessageBound);
 };
