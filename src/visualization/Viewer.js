@@ -49,6 +49,7 @@ ROS3D.Viewer = function(options) {
 
   // create the canvas to render to
   this.renderer = new THREE.WebGLRenderer({
+    preserveDrawingBuffer: true,
     antialias : antialias,
     alpha: true
   });
